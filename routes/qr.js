@@ -1,75 +1,98 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const pino = require('pino');
-const { default: cyber_Tech, useMultiFileAuthState, makeCacheableSignalKeyStore, delay } = require('maher-zubair-baileys');
+const QRCode = require('qrcode');
 const { makeid } = require('../id');
-const { Boom } = require('@hapi/boom');
+const { delay } = require('@whiskeysockets/baileys');
+const {
+  default: cyber_Tech,
+  useMultiFileAuthState,
+  makeCacheableSignalKeyStore,
+  Browsers
+} = require('@whiskeysockets/baileys');
 
 const router = express.Router();
 
+function removeFile(FilePath) {
+  if (!fs.existsSync(FilePath)) return;
+  fs.rmSync(FilePath, {
+    recursive: true,
+    force: true
+  });
+}
+
 router.get('/', async (req, res) => {
+  // Set up SSE (Server-Sent Events) headers
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
   const id = makeid();
-  const { state, saveCreds } = await useMultiFileAuthState(`./temp/${id}`);
+  const tempPath = path.join(__dirname, '..', 'temp', id);
+  const { state, saveCreds } = await useMultiFileAuthState(tempPath);
 
   const sock = cyber_Tech({
     auth: {
       creds: state.creds,
-      keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'fatal' }))
+      keys: makeCacheableSignalKeyStore(state.keys, pino({ level: 'silent' }))
     },
-    logger: pino({ level: 'fatal' }),
-    browser: ['Chrome', 'Ubuntu', '22']
+    logger: pino({ level: 'silent' }),
+    browser: Browsers.macOS('Desktop')
   });
 
   sock.ev.on('creds.update', saveCreds);
 
   sock.ev.on('connection.update', async (update) => {
-    const { connection, qr } = update;
+    const { connection, qr, lastDisconnect } = update;
 
     if (qr) {
-      res.write(`data:${await toDataURL(qr)}\n\n`);
+      const qrDataUrl = await QRCode.toDataURL(qr);
+      res.write(`data: ${qrDataUrl}\n\n`);
     }
 
     if (connection === 'open') {
-      const sessionId = makeid();
-      const sent = await sock.sendMessage(sock.user.id, { text: `*${sessionId}*` });
-      await sock.sendMessage(sock.user.id, {
-        text: `📌 Above is your session from Cyber_Jay`,
-        quoted: sent
-      });
+      await delay(5000);
+      const credsPath = path.join(tempPath, 'creds.json');
+      const base64 = fs.existsSync(credsPath)
+        ? Buffer.from(fs.readFileSync(credsPath)).toString('base64')
+        : '';
 
-      await delay(500);
-      await sock.sendMessage(sock.user.id, {
-        text: `
-┏━━━━━━━━━━━━━━ 
+      const sessionMessage = await sock.sendMessage(sock.user.id, { text: `*${base64}*` });
+
+      const messageText = `
+┏━━━━━━━━━━━━━━
 ┃SHADOW-REAPER-MD SESSION IS 
 ┃SUCCESSFULLY
 ┃CONNECTED ✅🔥
 ┗━━━━━━━━━━━━━━━
-❶ || Creator = 🤓 CYBER_JAY 🤓
-❷ || WhattsApp Channel = https://whatsapp.com/channel/0029VafHRSWDzgTGeS2rGn3c
-Please Follow My Support Channel
-Wanna talk to me?👉 https://t.me/billy 👈
-🙅🏽‍♂️ https://wa.me/M2BKBKULFC5QP1 🙅🏽‍♂️
-©*2025-to-date Cyber_Jay*
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+❶ || Creator:🤓 CYBER_JAY 🤓
+❷ || WhatsApp Channel:(https://whatsapp.com/channel/0029VafHRSWDzgTGeS2rGn3c)
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+┏━━━━━━━━━━━━━━
+*_INSTRUCTIONS_*
+• Copy the session to your bot folder.
+• Run your bot.
+┗━━━━━━━━━━━━━━
+▬▬▬▬▬▬▬▬▬▬▬▬▬▬
+©*2024-to-${currentYear} Cyber_Jay*
 _Don't Forget To Give A ⭐Star To My Repo_
-_____________________________________
-        `
-      });
+_____________________________________`;
+
+      await sock.sendMessage(sock.user.id, {
+        text: messageText
+      }, { quoted: sessionMessage });
 
       await sock.ws.close();
-      fs.rmSync(`./temp/${id}`, { recursive: true, force: true });
+      removeFile(tempPath);
       res.end();
+    } else if (connection === 'close' && lastDisconnect?.error?.output?.statusCode !== 401) {
+      await delay(5000);
+      res.write(`data: RECONNECTING\n\n`);
     }
   });
 });
-
-function toDataURL(text) {
-  const QRCode = require('qrcode');
-  return QRCode.toDataURL(text);
-}
 
 module.exports = router;

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Me</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #00ffc3;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 40px;
+      text-shadow: 0 0 15px #00ffc3, 0 0 30px #00ffc3;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      z-index: 2;
+      position: relative;
+    }
+
+    .card {
+      background: rgba(0, 255, 195, 0.07);
+      border: 1px solid #00ffc3;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px #00ffc3;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: block;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .card:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 35px #00ffc3;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      margin: 0;
+    }
+
+    .rain {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .raindrop {
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      background: rgba(0, 255, 195, 0.3);
+      animation: rainDrop linear infinite;
+    }
+
+    @keyframes rainDrop {
+      to { transform: translateY(110vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Contact Me</h1>
+  <div class="contact-grid">
+    <a href="tel:+233547838433" class="card">
+      <h3>📞 Phone</h3>
+      <p>+233 54 783 8433</p>
+    </a>
+    <a href="mailto:tottimehtawiah@gmail.com" class="card">
+      <h3>✉️ Email</h3>
+      <p>tottimehtawiah@gmail.com</p>
+    </a>
+    <a href="https://www.tiktok.com/@lil_jay" target="_blank" class="card">
+      <h3>📸 TikTok</h3>
+      <p>@lil_jay</p>
+    </a>
+    <a href="https://t.me/junior_billyhills" target="_blank" class="card">
+      <h3>💬 Telegram</h3>
+      <p>@junior_billyhills</p>
+    </a>
+    <a href="https://instagram.com/junior_billyhills" target="_blank" class="card">
+      <h3>📷 Instagram</h3>
+      <p>@junior_billyhills</p>
+    </a>
+    <a href="https://github.com/TA-wiah" target="_blank" class="card">
+      <h3>🐙 GitHub</h3>
+      <p>github.com/TA-wiah</p>
+    </a>
+  </div>
+
+  <div class="rain" id="rain-container"></div>
+  <script>
+    const rainContainer = document.getElementById('rain-container');
+    for (let i = 0; i < 100; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'raindrop';
+      drop.style.left = Math.random() * 100 + 'vw';
+      drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      drop.style.animationDelay = Math.random() * 5 + 's';
+      rainContainer.appendChild(drop);
+    }
+  </script>
+</body>
+</html>

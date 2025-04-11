@@ -1,12 +1,140 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>WhatsApp Linker</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cyber_Jay || Tech</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #0f0f0f;
+      color: #00ffc3;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .container {
+      z-index: 2;
+      text-align: center;
+      padding: 20px;
+      animation: boomPulse 3s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #00ffc3, 0 0 40px #00ffc3;
+    }
+
+    .btn {
+      display: block;
+      margin: 15px auto;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      color: #00ffc3;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid #00ffc3;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 80%;
+      max-width: 300px;
+      box-shadow: 0 0 10px #00ffc3;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn:hover {
+      background-color: #00ffc3;
+      color: #000;
+      box-shadow: 0 0 25px #00ffc3, 0 0 50px #00ffc3;
+      transform: scale(1.1);
+    }
+
+    @keyframes boomPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.02);
+        opacity: 0.95;
+      }
+    }
+
+    /* Rain effect */
+    .rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .raindrop {
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      background: rgba(0, 255, 195, 0.3);
+      animation: rainDrop linear infinite;
+    }
+
+    @keyframes rainDrop {
+      to {
+        transform: translateY(110vh);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .btn {
+        font-size: 0.95rem;
+        padding: 12px 25px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Link Your WhatsApp</h1>
-  <button onclick="location.href='qr.html'">Link with QR Code</button>
-  <button onclick="location.href='pair.html'">Link with Phone & Code</button>
-  <a href="pair.html"><button>Pair with Phone Number</button></a>
+  <div class="container">
+    <h1>Welcome, <spam>To CYber Tech Hub</spam></h1>
+    <button class="btn" onclick="location.href='qr.html'">Link with QR Code</button>
+    <button class="btn" onclick="location.href='pair.html'">Pair with Code</button>
+    <button class="btn" onclick="location.href='project.html'">Project</button>
+    <button class="btn" onclick="location.href='contact.html'">Chat</button>
+    <button class="btn" onclick="location.href='about.html'">About me</button>
+  </div>
+
+  <div class="rain" id="rain-container"></div>
+
+  <script>
+    const rainContainer = document.getElementById('rain-container');
+    const dropCount = 100;
+
+    for (let i = 0; i < dropCount; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'raindrop';
+      drop.style.left = Math.random() * 100 + 'vw';
+      drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      drop.style.animationDelay = Math.random() * 5 + 's';
+      rainContainer.appendChild(drop);
+    }
+  </script>
 </body>
 </html>

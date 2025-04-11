@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About Me</title>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #00ffc3;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 600px;
+      padding: 30px;
+      background: rgba(0, 255, 195, 0.07);
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ffc3;
+      animation: boomPulse 3s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      text-shadow: 0 0 15px #00ffc3, 0 0 30px #00ffc3;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #cafff7;
+    }
+
+    @keyframes boomPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.95; }
+    }
+
+    .rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .raindrop {
+      position: absolute;
+      width: 2px;
+      height: 80px;
+      background: rgba(0, 255, 195, 0.3);
+      animation: rainDrop linear infinite;
+    }
+
+    @keyframes rainDrop {
+      to { transform: translateY(110vh); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>About Cyber_Jay</h1>
+    <p>
+        Jeffrey Tottimeh is a talented young developer with a strong passion for technology, robotics, and aviation. 
+        Starting his journey at Apam Senior High School, he excelled in academics and leadership, representing his school in national and international competitions like Robofest and WRO. 
+        As the leader of the Robotics Club, he led his team to significant success.
+
+        At Hatchers Studio, Jeffrey contributes as a software and web developer, working on projects like the Apass Robotic Database Learning Material and developing advanced bots, 
+        such as SHADOW-RREAPER-MD, a WhatsApp bot with session-based authentication. His other projects include a PC download manager and a Telegram bot suite with secure payment integration.
+        
+        In addition to these, Jeffrey(Cyber Jay) is building, a tech initiative that blends his skills and passion for creating next-gen tools. He is also developing a 
+        TikTok bot to automate content curation, making processes more efficient for creators. 
+        With dreams of becoming a pilot, he blends his love for aviation with his deep interest in technology, aiming to make an impact as a world-class technologist and future pilot.
+    </p>
+  </div>
+  <div class="rain" id="rain-container"></div>
+  <script>
+    const rainContainer = document.getElementById('rain-container');
+    for (let i = 0; i < 100; i++) {
+      const drop = document.createElement('div');
+      drop.className = 'raindrop';
+      drop.style.left = Math.random() * 100 + 'vw';
+      drop.style.animationDuration = (Math.random() * 2 + 2) + 's';
+      drop.style.animationDelay = Math.random() * 5 + 's';
+      rainContainer.appendChild(drop);
+    }
+  </script>
+</body>
+</html>
