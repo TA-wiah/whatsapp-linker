@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>QR Code Login</title>
+</head>
+<body>
+  <h2>Scan the QR Code with WhatsApp</h2>
+  <div id="qr"></div>
+
+  <script>
+    const source = new EventSource('/qr');
+    source.onmessage = function(event) {
+      document.getElementById('qr').innerHTML = `<img src="${event.data}" alt="QR Code"/>`;
+    };
+  </script>
+</body>
+</html>

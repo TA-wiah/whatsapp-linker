@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Link with Phone Number</title>
+</head>
+<body>
+  <h2>Enter Your Phone Number</h2>
+  <input type="text" id="phone" placeholder="e.g. 2348012345678" />
+  <button onclick="startPairing()">Get 6-Digit Code</button>
+  <p id="code"></p>
+
+  <script>
+    async function startPairing() {
+      const phone = document.getElementById('phone').value;
+      if (!phone) return alert('Enter a valid phone number');
+
+      const res = await fetch(`/pair?number=${phone}`);
+      const data = await res.json();
+
+      if (data.code) {
+        document.getElementById('code').innerText = 'Enter this code on your WhatsApp: ' + data.code;
+      } else {
+        document.getElementById('code').innerText = 'Error: ' + (data.error || 'Try again later');
+      }
+    }
+  </script>
+</body>
+</html>
